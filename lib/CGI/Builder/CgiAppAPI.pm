@@ -1,5 +1,5 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.1 ;
+$VERSION = 1.11 ;
 
 
 ; use strict
@@ -215,7 +215,7 @@ $VERSION = 1.1 ;
         }
       , { name       => 'page_name'
         , default    => sub
-                         { eval '$CGI::Builder::Magic::VERSION'
+                         { $_[0]->isa('CGI::Builder::Magic')
                            ? 'index'
                            : 'start'
                          }
@@ -299,7 +299,7 @@ $VERSION = 1.1 ;
 
 ; sub dump
    { my $s = @_
-   ; $hints && not(eval '$CGI::Builder::Test::VERSION') && carp
+   ; $hints && not($s->isa('CGI::Builder::Test')) && carp
      qq(You should include 'CGI::Builder::Test' )
    . qq(in your build in order to use the 'dump()' method)
    ; require CGI::Builder::Test
@@ -308,7 +308,7 @@ $VERSION = 1.1 ;
 
 ; sub dump_html
    { my $s = @_
-   ; $hints && not(eval '$CGI::Builder::Test::VERSION') && carp
+   ; $hints && not($s->isa('CGI::Builder::Test')) && carp
      qq(You should include 'CGI::Builder::Test' )
    . qq(in your build in order to use the 'dump_html()' method)
    ; require CGI::Builder::Test
@@ -317,12 +317,12 @@ $VERSION = 1.1 ;
 
       
 ; sub checkRM
-      {
-      if ( $hints )
-         { eval '$CGI::Application::CheckRM::VERSION' && carp
+      { my $s = @_
+      ; if ( $hints )
+         { $s->isa('CGI::Application::CheckRM') && carp
            qq(You should not use 'CGI::Application::CheckRM' in your build)
         
-         ; not(eval '$CGI::Builder::DFVCheck::VERSION') && carp
+         ; not($s->isa('CGI::Builder::DFVCheck')) && carp
            qq(You should include 'CGI::Builder::DFVCheck' in your build)
         
          ; carp qq(Change 'checkRM' with 'dfv_check')
@@ -332,11 +332,12 @@ $VERSION = 1.1 ;
       }
       
 ; sub tm_defaults
-      { if ( $hints )
-         { eval '$CGI::Application::Magic::VERSION' && carp
+      { my $s = @_
+      ; if ( $hints )
+         { $s->isa('CGI::Application::Magic') && carp
            qq(You should not use 'CGI::Application::Magic' in your build)
         
-         ; not(eval '$CGI::Builder::Magic::VERSION') && carp
+         ; not($s->isa('CGI::Builder::Magic')) && carp
            qq(You should include 'CGI::Builder::Magic' in your build)
         
          ; carp qq(Change 'tm_defaults' with 'tm_new_args')
@@ -346,11 +347,12 @@ $VERSION = 1.1 ;
       }
 
 ; sub request
-      { if ( $hints )
-         { eval '$Apache::Application::Plus::VERSION' && carp
+      { my $s = @_
+      ; if ( $hints )
+         { $s->isa('Apache::Application::Plus') && carp
            qq(You should not use 'Apache::Application::Plus' in your build)
         
-        ; not(eval '$Apache::CGI::Builder::VERSION') && carp
+        ; not($s->isa('Apache::CGI::Builder')) && carp
           qq(You should include 'Apache::CGI::Builder' in your build)
         
         ; carp qq(Change 'request' with 'r')
@@ -463,7 +465,7 @@ __END__
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.1
+=head1 VERSION 1.11
 
 The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 
@@ -473,7 +475,7 @@ The latest versions changes are reported in the F<Changes> file in this distribu
 
 =item Prerequisites
 
-    CGI::Builder >= 1.1
+    CGI::Builder >= 1.11
 
 =item CPAN
 

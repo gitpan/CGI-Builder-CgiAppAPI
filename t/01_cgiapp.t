@@ -10,14 +10,14 @@
 
 BEGIN { $| = 1;  }
 
-; use Test::More tests => 17;
+; use Test::More tests => 18;
 
 ######################### End of black magic.
 
 
 # Need CGI.pm for tests
 use CGI;
-
+use CGI::Builder;
 # bring in testing hierarchy
 
 
@@ -37,6 +37,12 @@ use TestApp4 ;
 use TestApp5 ;
 
 $ENV{CGI_APP_RETURN_ONLY} = 1;
+
+{
+ my $ca_obj = CGI::Builder->new();
+ ok ((ref($ca_obj) && $ca_obj->isa('CGI::Builder')))
+}
+
 
 # Test 3: run() CGI::Application::Plus object.  Expect header + output dump_html()
 {

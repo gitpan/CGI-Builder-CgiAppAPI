@@ -1,6 +1,10 @@
 CGI-Builder-CgiAppAPI Latest Versions Changes
 
 
+Version 1.11
+- This version contains the real 1.1 files: the 1.1 distribution
+  file was a wrong outdated file. Sorry for the mismatch.
+
 Version 1.1
 - Adapted the test suite to the new 1.1 features
 - A few changes and default fixes
