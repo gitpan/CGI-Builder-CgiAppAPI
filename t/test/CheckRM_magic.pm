@@ -6,9 +6,10 @@
   qw| CGI::Builder::DFVCheck
       CGI::Builder::Magic
       CGI::Builder::CgiAppAPI
+
     |
 
-; sub SH_start
+; sub SH_index
    { my $s = shift
    ; $s->checkRM( { required => 'email'
                   , msgs     => { prefix => 'err_' }

@@ -1,6 +1,10 @@
 CGI-Builder-CgiAppAPI Latest Versions Changes
 
 
+Version 1.1
+- Adapted the test suite to the new 1.1 features
+- A few changes and default fixes
+
 Version 1.01
 - Mirrored CGI::Builder 1.01 fixing
 - Minor POD fixes

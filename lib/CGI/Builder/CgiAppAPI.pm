@@ -1,5 +1,6 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.01 ;
+$VERSION = 1.1 ;
+
 
 ; use strict
 ; no warnings 'redefine'
@@ -11,16 +12,6 @@ $VERSION = 1.01 ;
 ; use Carp
 ; use CGI::Builder::Const qw| :all |
 
-# compatibilità per checkRM e Magic
-; BEGIN
-  { eval
-     { require CGI::Builder::Magic
-     ; require Apache::CGI::Builder
-     ; require CGI::Builder::DFVCheck
-     ; require CGI::Builder::Test
-     }
-  }
-          
 ; BEGIN
    { *QUERY
    = *query
@@ -97,6 +88,7 @@ $VERSION = 1.01 ;
       }
    }
 
+   
 # alias to make the CGI_APP_RETURN_ONLY work
 ; sub run
    { my $s = shift
@@ -156,11 +148,10 @@ $VERSION = 1.01 ;
       { $s->PHASE = PAGE_HANDLER
       ; my $phm = $s->page_handler_map
       ; my $RM  = $s->RM_prefix
-      ; my $PHA = PH.'AUTOLOAD'
       ; my $al
       ; my $page_handler
         =  $$phm{$p}
-        || $s->can(PH.$p)
+        || $s->can(do{PH.$p})
         || do{ my $h = $s->can($RM.$p)
              ; $h && $hints && ($RM ne 'PH_') && carp
                qq(Your are using '$RM' as the prefix of your )
@@ -168,7 +159,7 @@ $VERSION = 1.01 ;
              . qq('PH_' in all the run methods that use it)
              ; $h
              }
-        || do{ my $h = $$phm{'AUTOLOAD'} || $s->can($PHA)  # from PH_AUTO..
+        || do{ my $h = $$phm{'AUTOLOAD'} || $s->can(do{PH.'AUTOLOAD'})
              ; $h && ++ $al && $h
              }
       ; my $pc
@@ -183,6 +174,7 @@ $VERSION = 1.01 ;
             }
          ; $pc = $s->$page_handler( @args )
          }
+         
       ; unless ( length $s->page_content )
          { $hints && carp
            qq(A page handler \(former run method\) should set )
@@ -194,7 +186,7 @@ $VERSION = 1.01 ;
          }
       }
    }
-
+ 
 ; sub send_header
    { my $s = shift
    ; my $ht = $s->header_type
@@ -222,7 +214,11 @@ $VERSION = 1.01 ;
         , default    => 'rm'
         }
       , { name       => 'page_name'
-        , default    => 'start'
+        , default    => sub
+                         { eval '$CGI::Builder::Magic::VERSION'
+                           ? 'index'
+                           : 'start'
+                         }
         }
       , { name       => 'header_type'
         , default    => 'header'
@@ -241,20 +237,18 @@ $VERSION = 1.01 ;
         }
       )
 
-      
 # override to be same as the original
 ; use Object::groups
-      ( { name       => 'page_handler_map'
-        , no_strict  => 1
+      (
+      { name       => 'page_handler_map'
         , pre_process=> sub
                          { if ( ref $_[1] eq 'ARRAY' )
                             { $_[1] = { map { $_=>$_ } @{$_[1]} }
                             }
                          }
-        , default    => { start => \&dump_html }
-                         
         }
-      , { name       => 'qparam'
+      ,
+        { name       => 'qparam'
         , default    => sub
                          { $hints && carp
                            qq(The 'qparam' method is not supported. Use )
@@ -305,60 +299,70 @@ $VERSION = 1.01 ;
 
 ; sub dump
    { my $s = @_
-   ; $hints && not($CGI::Builder::Test::VERSION) && carp
+   ; $hints && not(eval '$CGI::Builder::Test::VERSION') && carp
      qq(You should include 'CGI::Builder::Test' )
    . qq(in your build in order to use the 'dump()' method)
+   ; require CGI::Builder::Test
    ; goto &CGI::Builder::Test::dump
    }
 
 ; sub dump_html
    { my $s = @_
-   ; $hints && not($CGI::Builder::Test::VERSION) && carp
+   ; $hints && not(eval '$CGI::Builder::Test::VERSION') && carp
      qq(You should include 'CGI::Builder::Test' )
    . qq(in your build in order to use the 'dump_html()' method)
+   ; require CGI::Builder::Test
    ; goto &CGI::Builder::Test::dump_html
    }
 
       
 ; sub checkRM
-      { if ( $hints )
-         { $CGI::Application::CheckRM::VERSION && carp
+      {
+      if ( $hints )
+         { eval '$CGI::Application::CheckRM::VERSION' && carp
            qq(You should not use 'CGI::Application::CheckRM' in your build)
         
-         ; not($CGI::Builder::DFVCheck::VERSION) && carp
+         ; not(eval '$CGI::Builder::DFVCheck::VERSION') && carp
            qq(You should include 'CGI::Builder::DFVCheck' in your build)
         
          ; carp qq(Change 'checkRM' with 'dfv_check')
          }
+      ; require CGI::Builder::DFVCheck
       ; goto &CGI::Builder::DFVCheck::dfv_check
       }
       
 ; sub tm_defaults
       { if ( $hints )
-         { $CGI::Application::Magic::VERSION && carp
+         { eval '$CGI::Application::Magic::VERSION' && carp
            qq(You should not use 'CGI::Application::Magic' in your build)
         
-         ; not($CGI::Builder::Magic::VERSION) && carp
+         ; not(eval '$CGI::Builder::Magic::VERSION') && carp
            qq(You should include 'CGI::Builder::Magic' in your build)
         
          ; carp qq(Change 'tm_defaults' with 'tm_new_args')
          }
+      ; require CGI::Builder::Magic
       ; goto &CGI::Builder::Magic::tm_new_args
       }
 
 ; sub request
       { if ( $hints )
-         { $Apache::Application::Plus::VERSION && carp
+         { eval '$Apache::Application::Plus::VERSION' && carp
            qq(You should not use 'Apache::Application::Plus' in your build)
         
-        ; not($Apache::CGI::Builder::VERSION) && carp
+        ; not(eval '$Apache::CGI::Builder::VERSION') && carp
           qq(You should include 'Apache::CGI::Builder' in your build)
         
         ; carp qq(Change 'request' with 'r')
         }
+      ; require Apache::CGI::Builder
       ; goto &Apache::CGI::Builder::r
       }
-        
+
+; sub setup
+   { $_[0]->page_handler_map(start => \&dump_html)
+   }
+           
 ; sub OH_init
    { my $s = shift
    ; if ( $s->can('cgiapp_init') )
@@ -366,11 +370,12 @@ $VERSION = 1.01 ;
         qq(Just change 'cgiapp_init' with 'OH_init')
       ; $s->cgiapp_init(@_)
       }
-   ; if ( $s->can('setup') )
+   ; no strict 'refs'
+   ; if ( defined &{ref($s).'::setup'} )
       { $hints && carp
         qq(Just change 'setup' with 'OH_init')
-      ; $s->setup(@_)
       }
+   ; $s->setup(@_)
    }
    
 ; sub OH_pre_process
@@ -458,7 +463,7 @@ __END__
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.01
+=head1 VERSION 1.1
 
 The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 
@@ -468,7 +473,7 @@ The latest versions changes are reported in the F<Changes> file in this distribu
 
 =item Prerequisites
 
-    CGI::Builder >= 1.01
+    CGI::Builder >= 1.1
 
 =item CPAN
 

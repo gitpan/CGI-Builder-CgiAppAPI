@@ -10,8 +10,7 @@
 
 BEGIN { $| = 1;  }
 
-; use CGI::Builder
-; use Test::More tests => 18;
+; use Test::More tests => 17;
 
 ######################### End of black magic.
 
@@ -30,18 +29,14 @@ BEGIN
 use lib 'test';
 
 use TestApp  ;
+
 use TestApp2 ;
 use TestApp3 ;
+
 use TestApp4 ;
 use TestApp5 ;
 
 $ENV{CGI_APP_RETURN_ONLY} = 1;
-# Test 2: Instantiate CGI::Application::Plus
-{
- my $ca_obj = CGI::Builder->new();
- ok ((ref($ca_obj) && $ca_obj->isa('CGI::Builder')))
-}
-
 
 # Test 3: run() CGI::Application::Plus object.  Expect header + output dump_html()
 {
@@ -62,7 +57,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
 # Test 5: run() CGI::Application::Plus sub-class.  Expect HTTP header + 'Hello World: basic_test'.
 {
  my $ta_obj = TestApp->new(QUERY=>CGI->new(""));
- my $t5_output = $ta_obj->run();  # warn $t5_output ;
+ my $t5_output = $ta_obj->run();  
  ok (($t5_output =~ /^Content\-Type\:\ text\/html/) && ($t5_output =~ /Hello\ World\:\ basic\_test/))
 
 }

@@ -23,8 +23,8 @@
    
    # start.html + passing zone obj
    ; my $ap1 = ApplMagic1->new()
+
    ; my $o1 = $ap1->run()
-  # ; warn $o1
    ; ok( $o1 =~ /text START ID1 ATTRIBUTES1 text ID2 text/ )
 
    # lookup in param
