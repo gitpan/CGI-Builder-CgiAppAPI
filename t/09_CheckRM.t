@@ -14,9 +14,6 @@
       ; require 'CheckRM_magic.pm'
       }
    }
-   
-
-
 
 # index.tmpl
 ; my $ap1 = Appl1->new()

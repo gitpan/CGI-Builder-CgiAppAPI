@@ -14,8 +14,8 @@
    ; $s->checkRM( { required => 'email'
                   , msgs     => { prefix => 'err_' }
                   }
-                  )
-                  || $s->switch_to('myOtherPage')
+                )
+                || $s->switch_to('myOtherPage')
    }
 
 

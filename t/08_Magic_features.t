@@ -28,14 +28,13 @@
 
    # lookup in param
    ; my $ap2 = ApplMagic2->new()
-   ; $ap2-> tm_new_args( lookups => [ 'ApplMagic2::Lookups'
-                           , scalar $ap2->param()
-                           ]
-                       )
+   ; $ap2-> tm_new_args( lookups => scalar $ap2->param() )
    ; my $o2 = $ap2->run()
    ; ok( $o2 =~ /text START ID1 text ID2 text/ )
 
 
+   ; $ap2->tm = undef
+   ; delete $ap2->tm_new_args->{lookups}
    # lookup without param
    ; my $ap3 = ApplMagic2->new()
    ; my $o3 = $ap3->run()

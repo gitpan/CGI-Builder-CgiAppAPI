@@ -1,7 +1,7 @@
 ; use ExtUtils::MakeMaker
 
 ; my $dist = 'CGI::Builder::CgiAppAPI'
-; my $vers = '1.12'
+; my $vers = '1.2'
 
 ; WriteMakefile
    ( NAME           => $dist
@@ -11,7 +11,7 @@
        , ABSTRACT   => 'Use CGI::Application API with CGI::Builder'
        )
      : ()
-   , PREREQ_PM      => { 'CGI::Builder' => '1.11' }
+   , PREREQ_PM      => { 'CGI::Builder' => '1.2' }
    )
 
 ; eval

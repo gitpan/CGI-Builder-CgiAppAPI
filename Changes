@@ -1,6 +1,11 @@
 CGI-Builder-CgiAppAPI Latest Versions Changes
 
 
+Version 1.2
+- Updated POD according to the latest changes in Apache::CGI::Builder
+- Changed the prerequisite C::B version to 1.2
+- Some internal changes to be more consistent with new 1.2 version
+
 Version 1.12
 - Eliminated useless 'use CGI::Application::Plus::Util' statement from
   a few tests that caused failure on machines where CGI::Application::Plus

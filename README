@@ -11,7 +11,7 @@ Installation
 ------------
 
 0.  Prerequisites:
-    - CGI::Builder >= 1.0
+    - CGI::Builder >= 1.2
 
 1. CPAN installation
 

@@ -1,5 +1,5 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.12 ;
+$VERSION = 1.2 ;
 
 
 ; use strict
@@ -464,7 +464,7 @@ __END__
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.12
+=head1 VERSION 1.2
 
 The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 
@@ -474,7 +474,7 @@ The latest versions changes are reported in the F<Changes> file in this distribu
 
 =item Prerequisites
 
-    CGI::Builder >= 1.12
+    CGI::Builder >= 1.2
 
 =item CPAN
 
@@ -536,6 +536,20 @@ a startup aid to learn (faster) the CBF API (just if you are familiar with the c
 
 =back
 
+=head2 Useful links
+
+=over
+
+=item *
+
+A simple and useful navigation system between the various CBF extensions is available at this URL: http://perl.4pro.net
+
+=item *
+
+More practical topics are probably discussed in the mailing list at this URL: http://lists.sourceforge.net/lists/listinfo/cgi-builder-users
+
+=back
+
 =head1 LEARNING WITH THIS API
 
 If you are familiar with cgiapp API, you can use this module as an aid to quickly learn how to change your 'cgiapp abits'. Just build your application including it, and switch the hints ON:
@@ -588,9 +602,8 @@ These are all the possible configurations for all the possible modules covered b
 
 =item Apache::Application::Plus
 
-   use CGI::Builder
-   qw| Apache::CGI::Builder
-       CGI::Builder::CgiAppAPI
+   use Apache::CGI::Builder
+   qw| CGI::Builder::CgiAppAPI
      |;
 
 =item CGI::Application::Magic
@@ -602,9 +615,8 @@ These are all the possible configurations for all the possible modules covered b
 
 =item Apache::Application::Magic
 
-   use CGI::Builder
-   qw| Apache::CGI::Builder
-       CGI::Builder::Magic
+   use Apache::CGI::Builder
+   qw| CGI::Builder::Magic
        CGI::Builder::CgiAppAPI
      |;
 
@@ -1004,7 +1016,7 @@ Support for all the modules of the CBF is via the mailing list. The list is used
 
 You can join the CBF mailing list at this url:
 
-    http://lists.sourceforge.net/lists/listinfo/cgi-builder-users
+http://lists.sourceforge.net/lists/listinfo/cgi-builder-users
 
 =head1 AUTHOR and COPYRIGHT
 
