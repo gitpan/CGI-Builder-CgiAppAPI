@@ -1,6 +1,16 @@
 CGI-Builder-CgiAppAPI Latest Versions Changes
 
 
+Version 1.24
+- Eliminated version check and installation feedback system
+  ("phone home" opt-out) from Makefile.PL to make Randal L Schwartz happy :-)
+  and sad the author :-(
+
+
+Version 1.23
+- Added the not page_content_check() condition before using
+  AUTOLOAD page handler
+
 Version 1.22
 - Minor POD changes
 
