@@ -1,5 +1,5 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.24 ;
+$VERSION = 1.25 ;
 
 # This file uses the "Perlish" coding style
 # please read http://perl.4pro.net/perlish_coding_style.html
@@ -137,7 +137,7 @@ $VERSION = 1.24 ;
 
    ; $s->PHASE = SWITCH_HANDLER
    ; my $shm    = $s->switch_handler_map
-   ; my $switch_handler = $$shm{$p} || $s->can(SH.$p)
+   ; my $switch_handler = $$shm{$p} || $s->can("SH_$p")
    ; $s->$switch_handler() if $switch_handler
 
    ; if ($s->PHASE < PRE_PAGE)
@@ -152,7 +152,7 @@ $VERSION = 1.24 ;
       ; my $al
       ; my $page_handler
         =  $$phm{$p}
-        || $s->can(do{PH.$p})
+        || $s->can("PH_$p")
         || do{ my $h = $s->can($RM.$p)
              ; $h && $hints && ($RM ne 'PH_') && carp
                qq(Your are using '$RM' as the prefix of your )
@@ -161,7 +161,7 @@ $VERSION = 1.24 ;
              ; $h
              }
         || do{ unless ($s->page_content_check)
-                { my $h = $$phm{'AUTOLOAD'} || $s->can(do{PH.'AUTOLOAD'})
+                { my $h = $$phm{'AUTOLOAD'} || $s->can('PH_AUTOLOAD')
                 ; $h && ++ $al && $h
                 }
              }
@@ -468,7 +468,7 @@ __END__
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.24
+=head1 VERSION 1.25
 
 The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 
@@ -478,7 +478,7 @@ The latest versions changes are reported in the F<Changes> file in this distribu
 
 =item Prerequisites
 
-    CGI::Builder >= 1.2
+    CGI::Builder >= 1.26
 
 =item CPAN
 
@@ -520,6 +520,8 @@ From the directory where this file is located, type:
 
 =head1 DESCRIPTION
 
+B<Note>: You should know L<CGI::Builder>.
+
 This module supplies an API compatible with the C<CGI::Application> or C<CGI::Application::Plus> APIs. It transparently provides all the aliases, defaults and method redefinition to make the old cgiapps work unchanged under CBF as well. Besides, it provides also very useful run-time hints that will suggest you what to change in your old code and what to read in this documentation in order to smoothly trasform your old cgiapp into a CGI::Builder application or simply learn the CBF faster.
 
 B<WARNING>: This module is not intended to be used neither as an alternative API for the CBF nor in a production environment. You should use it only as:
@@ -537,20 +539,6 @@ a substantial aid to the migration process from an old cgiapp to the CBF
 =item *
 
 a startup aid to learn (faster) the CBF API (just if you are familiar with the cgiapp API)
-
-=back
-
-=head2 Useful links
-
-=over
-
-=item *
-
-A simple and useful navigation system between the various CBF extensions is available at this URL: L<http://perl.4pro.net>
-
-=item *
-
-More examples and more practical topics are available in the mailing list at this URL: L<http://lists.sourceforge.net/lists/listinfo/cgi-builder-users>
 
 =back
 
@@ -1016,11 +1004,7 @@ Change the C<request()> property accessor provided by C<Apache::Application::Plu
 
 =head1 SUPPORT
 
-Support for all the modules of the CBF is via the mailing list. The list is used for general support on the use of the CBF, announcements, bug reports, patches, suggestions for improvements or new features. The API to the CBF is stable, but if you use the CBF in a production environment, it's probably a good idea to keep a watch on the list.
-
-You can join the CBF mailing list at this url:
-
-L<http://lists.sourceforge.net/lists/listinfo/cgi-builder-users>
+See L<CGI::Builder/"SUPPORT">.
 
 =head1 AUTHOR and COPYRIGHT
 

@@ -3,18 +3,20 @@
 
 ; use ExtUtils::MakeMaker
 
-; my $dist = 'CGI::Builder::CgiAppAPI'
-; my $vers = '1.23'
+; my $pm = 'lib/CGI/Builder/CgiAppAPI.pm'
 
 ; WriteMakefile
-   ( NAME           => $dist
-   , VERSION        => $vers
+   ( NAME           => 'CGI::Builder::CgiAppAPI'
+   , VERSION_FROM   => $pm
    , ( $] ge '5.005' )
-     ? ( AUTHOR     => 'Domizio Demichelis - perl.4pro.net'
-       , ABSTRACT   => 'Use CGI::Application API with CGI::Builder'
+     ? ( AUTHOR        => 'Domizio Demichelis - perl.4pro.net'
+       , ABSTRACT_FROM => $pm
        )
      : ()
-   , PREREQ_PM      => { 'CGI::Builder' => '1.2' }
+   , PREREQ_PM      => { 'CGI::Builder'   => 1.26
+                       , 'Object::props'  => 1.62
+                       , 'Object::groups' => 1.62
+                       }
    )
 
 
