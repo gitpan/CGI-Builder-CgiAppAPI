@@ -2,7 +2,6 @@
 ; use strict
 ; use Test::More tests => 6
 ; use CGI
-; use CGI::Application::Plus::Util
 
 # Prevent output to STDOUT
 ; $ENV{CGI_APP_RETURN_ONLY} = 1;

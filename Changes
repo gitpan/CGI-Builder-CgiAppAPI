@@ -1,6 +1,11 @@
 CGI-Builder-CgiAppAPI Latest Versions Changes
 
 
+Version 1.12
+- Eliminated useless 'use CGI::Application::Plus::Util' statement from
+  a few tests that caused failure on machines where CGI::Application::Plus
+  was not installed.
+
 Version 1.11
 - This version contains the real 1.1 files: the 1.1 distribution
   file was a wrong outdated file. Sorry for the mismatch.

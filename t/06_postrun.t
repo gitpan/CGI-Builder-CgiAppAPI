@@ -1,7 +1,5 @@
 use Test::More tests=>7;
 
-use CGI::Application::Plus::Util;
-
 use CGI;
 
 # Prevent output to STDOUT

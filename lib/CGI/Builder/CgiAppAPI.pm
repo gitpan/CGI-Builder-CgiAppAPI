@@ -1,15 +1,14 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.11 ;
+$VERSION = 1.12 ;
 
 
 ; use strict
 ; no warnings 'redefine'
-; use Carp
+; use CGI::Carp
 ; $Carp::Internal{+__PACKAGE__}++
 ; our $hints
 ######### OLD CGI APP ############
 
-; use Carp
 ; use CGI::Builder::Const qw| :all |
 
 ; BEGIN
@@ -364,7 +363,7 @@ $VERSION = 1.11 ;
 ; sub setup
    { $_[0]->page_handler_map(start => \&dump_html)
    }
-           
+        
 ; sub OH_init
    { my $s = shift
    ; if ( $s->can('cgiapp_init') )
@@ -465,7 +464,7 @@ __END__
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.11
+=head1 VERSION 1.12
 
 The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 
@@ -475,7 +474,7 @@ The latest versions changes are reported in the F<Changes> file in this distribu
 
 =item Prerequisites
 
-    CGI::Builder >= 1.11
+    CGI::Builder >= 1.12
 
 =item CPAN
 
@@ -747,7 +746,7 @@ As you see, in scalar context (no difference in list context) the C<param()> met
 
 The CBF implements a different metaphor based on 'processing pages' instead of 'running applications'. This should be simpler to understand (specially for beginners) because it is more consistent with the specific task that a CGI::Builder application performs.
 
-Even if the internal implementation of similar methods is greatly improved and has a completely different internal implementation, from the user point of view most changes here don't require more than a simple translation of identifier from one concept to the other, while just a few changes need little more attention.
+Even if the internal implementation of similar methods is greatly improved and has a completely different internal code, from the user point of view most changes here don't require more than a simple translation of identifier from one concept to the other, while just a few changes need little more attention.
 
 The CGI::Application philosophy is very simple: the application defines several run methods, and each run method is organized to produce and return its own output page. You have to set a map in the application to define what run method has to be called for each run mode (the C<runmodes()> method does that map). This creates a pretty rigid structure.
 
@@ -785,7 +784,7 @@ C<start_mode>, C<get_current_runmode> (and C<runmode> in CGI::Application::Plus)
 
     $s->page_name = 'mystart'
     $s->page_name  # always returns the current page name
-    
+
 B<Important Note>: Remember that the default C<page_name> is 'index' while the default run mode was 'start' so if you get rid of this API after a migration you should consider this new default.
 
 =head2 QUERY and query
@@ -947,7 +946,7 @@ C<start_capture> and C<stop_capture> methods are used to capture the output, eit
     $captured = $s->capture('process')
     # now $captured is the ref to the captured output
 
-Used in a cgiapp_postrun was:
+Used in a cgiapp_postrun it was:
 
     sub cgiapp_postrun
     {
@@ -999,7 +998,9 @@ Change the C<tm_defaults()> group accessor provided by C<CGI::Application::Magic
 
 Change the C<request()> property accessor provided by C<Apache::Application::Plus> with the C<r> property accessor provided by C<Apache::CGI::Builder>.
 
-=head1 SUPPORT and FEEDBACK
+=head1 SUPPORT
+
+Support for all the modules of the CBF is via the mailing list. The list is used for general support on the use of the CBF, announcements, bug reports, patches, suggestions for improvements or new features. The API to the CBF is stable, but if you use the CBF in a production environment, it's probably a good idea to keep a watch on the list.
 
 You can join the CBF mailing list at this url:
 

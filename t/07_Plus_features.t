@@ -2,7 +2,6 @@
 ; use strict
 ; use Test::More tests => 6
 ; use CGI
-; use CGI::Application::Plus::Util
 
 # Capture and return output
 ; $ENV{CGI_APP_RETURN_ONLY} = 1;
