@@ -1,5 +1,5 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.0 ;
+$VERSION = 1.01 ;
 
 ; use strict
 ; no warnings 'redefine'
@@ -144,11 +144,7 @@ $VERSION = 1.0 ;
 
    ; $s->PHASE = SWITCH_HANDLER
    ; my $shm    = $s->switch_handler_map
-   ; my $switch_handler = do {  $$shm{$p}        # SH from mapping
-                             || ( $s->can(SH.$p)  # SH from SH_method
-                                && SH.$p
-                                )
-                             }
+   ; my $switch_handler = $$shm{$p} || $s->can(SH.$p)
    ; $s->$switch_handler() if $switch_handler
 
    ; if ($s->PHASE < PRE_PAGE)
@@ -158,32 +154,23 @@ $VERSION = 1.0 ;
    
    ; if ( $s->PHASE < PAGE_HANDLER )
       { $s->PHASE = PAGE_HANDLER
-      ; my $phm    = $s->page_handler_map
-      ; my $RM     = $s->RM_prefix
+      ; my $phm = $s->page_handler_map
+      ; my $RM  = $s->RM_prefix
+      ; my $PHA = PH.'AUTOLOAD'
       ; my $al
       ; my $page_handler
-        = do {  $$phm{$p}          # PH from mapping
-             || $s->can(PH.$p)  # PH from PH_method
-                && PH.$p
-             || ( $s->can($RM.$p) # PH from RM_method
-                && ( ( $hints && ($RM ne 'PH_') && carp
-                       qq(Your are using '$RM' as the prefix of your )
-                     . qq(run methods \(Page Handlers\). Change it with )
-                     . qq('PH_' in all the run methods that use it)
-                     )
-                   || 1
-                   )
-                && $RM.$p
-                )
-             || (  $$phm{AUTOLOAD} # AUTOLOAD from mapping
-                && ++ $al && $$phm{AUTOLOAD}
-                )
-             || (  $s->can(PH.'ÁUTOLOAD')  # from PH_AUTO..
-                && ++ $al && PH.'ÁUTOLOAD'
-                )
+        =  $$phm{$p}
+        || $s->can(PH.$p)
+        || do{ my $h = $s->can($RM.$p)
+             ; $h && $hints && ($RM ne 'PH_') && carp
+               qq(Your are using '$RM' as the prefix of your )
+             . qq(run methods \(Page Handlers\). Change it with )
+             . qq('PH_' in all the run methods that use it)
+             ; $h
              }
-      
-      # ; $s->CGI::Builder::_::exec_PH($page_handler, $al, @args)
+        || do{ my $h = $$phm{'AUTOLOAD'} || $s->can($PHA)  # from PH_AUTO..
+             ; $h && ++ $al && $h
+             }
       ; my $pc
       ; if ( $page_handler )
          { if ($al)
@@ -471,9 +458,9 @@ __END__
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.0
+=head1 VERSION 1.01
 
-To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
+The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 
 =head1 INSTALLATION
 
@@ -481,7 +468,7 @@ To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"
 
 =item Prerequisites
 
-    CGI::Builder >= 1.0
+    CGI::Builder >= 1.01
 
 =item CPAN
 
@@ -751,7 +738,9 @@ As you see, in scalar context (no difference in list context) the C<param()> met
 
 =head1 CHANGES
 
-The CBF implements a different metaphor based on 'sending pages' instead of 'running applications'. This should be simpler to understand (specially for beginners) because it is more consistent with the specific task that a CGI::Builder application performs. Most changes here are just the 'translation' from one concept or convention to the other, and don't require more than a simple change of identifier, while other changes need little more attention on your side.
+The CBF implements a different metaphor based on 'processing pages' instead of 'running applications'. This should be simpler to understand (specially for beginners) because it is more consistent with the specific task that a CGI::Builder application performs.
+
+Even if the internal implementation of similar methods is greatly improved and has a completely different internal implementation, from the user point of view most changes here don't require more than a simple translation of identifier from one concept to the other, while just a few changes need little more attention.
 
 The CGI::Application philosophy is very simple: the application defines several run methods, and each run method is organized to produce and return its own output page. You have to set a map in the application to define what run method has to be called for each run mode (the C<runmodes()> method does that map). This creates a pretty rigid structure.
 
@@ -993,15 +982,15 @@ This property group accessor is not supported by the CBF. You can use the C<< $s
 
 =head2 checkRM
 
-Change the C<CGI::Application::CheckRM::checkRM()> method with C<CGI::Builder::DFVCheck::dfv_check()> method.
+Change the C<checkRM()> method provided by C<CGI::Application::CheckRM> with the C<dfv_check()> method provided by C<CGI::Builder::DFVCheck>.
 
 =head2 tm_defaults
 
-Change the C<CGI::Application::Magic::tm_defaults()> accessor with C<CGI::Builder::Magic::tm_new_args()> accessor.
+Change the C<tm_defaults()> group accessor provided by C<CGI::Application::Magic> with the C<tm_new_args()> group accessor provided by C<CGI::Builder::Magic>.
 
 =head2 request
 
-Change the C<Apache::CGI::Plus::request> and C<Apache::CGI::Magic::request>  property with C<Apache::CGI::Builder::r> property.
+Change the C<request()> property accessor provided by C<Apache::Application::Plus> with the C<r> property accessor provided by C<Apache::CGI::Builder>.
 
 =head1 SUPPORT and FEEDBACK
 

@@ -1,4 +1,9 @@
 CGI-Builder-CgiAppAPI Latest Versions Changes
 
+
+Version 1.01
+- Mirrored CGI::Builder 1.01 fixing
+- Minor POD fixes
+
 Version 1.0
 - First public release

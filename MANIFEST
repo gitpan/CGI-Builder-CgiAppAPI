@@ -2,7 +2,6 @@ Changes
 lib/CGI/Builder/CgiAppAPI.pm
 Makefile.PL
 MANIFEST			This list of files
-META.yml
 README
 t/01_cgiapp.t
 t/02_prerun.t
@@ -31,3 +30,4 @@ t/test/TestCGI.pm
 t/tm/ENV_RM.html
 t/tm/myOtherPage.html
 t/tm/start.html
+META.yml                                 Module meta-data (added by MakeMaker)
