@@ -36,9 +36,9 @@
 ; ok($o5 =~ /STST/)
 
 # set param from new
-; my $ap7 = ApplPlus5->new( myParam => 'myPARAM' )
-; is( $ap7->param('myParam')
-    , 'myPARAM'
+; my $ap7 = ApplPlus5->new( my_Param => 'my_PARAM' )
+; is( $ap7->param('my_Param')
+    , 'my_PARAM'
     )
 
 

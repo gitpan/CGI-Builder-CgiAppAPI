@@ -13,9 +13,9 @@
        , ABSTRACT_FROM => $pm
        )
      : ()
-   , PREREQ_PM      => { 'CGI::Builder'   => 1.26
-                       , 'Object::props'  => 1.62
-                       , 'Object::groups' => 1.62
+   , PREREQ_PM      => { 'CGI::Builder'   => 1.3
+                       , 'Object::props'  => 2
+                       , 'Object::groups' => 2
                        }
    )
 

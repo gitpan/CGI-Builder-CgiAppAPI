@@ -63,7 +63,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
 # Test 5: run() CGI::Application::Plus sub-class.  Expect HTTP header + 'Hello World: basic_test'.
 {
  my $ta_obj = TestApp->new(QUERY=>CGI->new(""));
- my $t5_output = $ta_obj->run();  
+ my $t5_output = $ta_obj->run();
  ok (($t5_output =~ /^Content\-Type\:\ text\/html/) && ($t5_output =~ /Hello\ World\:\ basic\_test/))
 
 }
@@ -211,6 +211,8 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
 
 # Test 18: Can we add params in batches?
 {
+ no warnings; # no warnings for unprefixed params
+
  my $ta_obj;
 
  $ta_obj = TestApp5->new(
@@ -224,7 +226,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
 
  # Do params set via new still get set?
  my $pt1 = 0;
- @plist = $ta_obj->param();
+ @plist = keys %{$ta_obj->param()};
  $pt1 = 1 if (
   (scalar(@plist) == 2)
   && (grep {$_ eq 'P1'} @plist)
@@ -233,7 +235,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
   && ($ta_obj->param('P2') eq 'two')
  );
  unless ($pt1) {
-  print STDERR "Params (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
+  print STDERR "Params 1 (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
   print STDERR "Values:\n\t". join("\n\t", (map { "$_ => '".$ta_obj->param($_)."'" } @plist)) ."\n";
  }
 
@@ -242,7 +244,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
  my $pt2 = 0;
  my $pt2val = $ta_obj->P2;
  $ta_obj->param('P3', 'three');
- @plist = $ta_obj->param();
+ @plist = keys %{$ta_obj->param()};
  $pt2 = 1 if (
   (scalar(@plist) == 3)
   && (grep {$_ eq 'P1'} @plist)
@@ -254,7 +256,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
   && ($pt2val eq 'two')
  );
  unless ($pt2) {
-  print STDERR "Params (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
+  print STDERR "Params 2 (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
   print STDERR "Values:\n\t". join("\n\t", (map { "$_ => '".$ta_obj->param($_)."'" } @plist)) ."\n";
  }
 
@@ -266,7 +268,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
   'P4' => 'four',
   'P5' => 'five'
  );
- @plist = $ta_obj->param();
+ @plist = keys %{$ta_obj->param()};
  $pt3 = 1 if (
   (scalar(@plist) == 5)
   && (grep {$_ eq 'P1'} @plist)
@@ -282,7 +284,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
   && (ref($pt3val) eq 'HASH')
  );
  unless ($pt3) {
-  print STDERR "Params (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
+  print STDERR "Params 3 (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
   print STDERR "Values:\n\t". join("\n\t", (map { "$_ => '".$ta_obj->param($_)."'" } @plist)) ."\n";
  }
 
@@ -294,7 +296,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
   'P6' => 'six',
   'P7' => 'seven',
  });
- @plist = $ta_obj->param();
+ @plist = keys  %{$ta_obj->param()};
  $pt4 = 1 if (
   (scalar(@plist) == 7)
   && (grep {$_ eq 'P1'} @plist)
@@ -314,7 +316,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
   && (ref($pt4val) eq 'HASH')
  );
  unless ($pt4) {
-  print STDERR "Params (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
+  print STDERR "Params 4 (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
   print STDERR "Values:\n\t". join("\n\t", (map { "$_ => '".$ta_obj->param($_)."'" } @plist)) ."\n";
  }
 
@@ -323,7 +325,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
  my $pt5 = 0;
  $ta_obj->param('P8', 'eight');
  my $pt5val = $ta_obj->param('P8');
- @plist = $ta_obj->param();
+ @plist = keys %{$ta_obj->param()};
  $pt5 = 1 if (
   (scalar(@plist) == 8)
   && (grep {$_ eq 'P1'} @plist)
@@ -345,7 +347,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
   && ($pt5val eq 'eight')
  );
  unless ($pt5) {
-  print STDERR "Params (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
+  print STDERR "Params 5 (". scalar(@plist) ."): ". join(", ", @plist) ."\n";
   print STDERR "Values:\n\t". join("\n\t", (map { "$_ => '".$ta_obj->param($_)."'" } @plist)) ."\n";
  }
 
@@ -358,6 +360,7 @@ ok ((ref($ta_obj) && $ta_obj->isa('CGI::Builder')))
  && $pt5
  )
 }
+
 
 ; SKIP:
    { skip("HTML::Template is not installed", 1 )

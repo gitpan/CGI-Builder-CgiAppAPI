@@ -1,10 +1,10 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.25 ;
+$VERSION = 1.26 ;
+use strict ;
 
 # This file uses the "Perlish" coding style
 # please read http://perl.4pro.net/perlish_coding_style.html
 
-; use strict
 ; no warnings 'redefine'
 ; use CGI::Carp
 ; $Carp::Internal{+__PACKAGE__}++
@@ -464,11 +464,13 @@ $VERSION = 1.25 ;
 
 __END__
 
+=pod
+
 =head1 NAME
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.25
+=head1 VERSION 1.26
 
 The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 
@@ -478,7 +480,8 @@ The latest versions changes are reported in the F<Changes> file in this distribu
 
 =item Prerequisites
 
-    CGI::Builder >= 1.26
+    CGI::Builder >= 1.3
+    
 
 =item CPAN
 
@@ -541,6 +544,8 @@ a substantial aid to the migration process from an old cgiapp to the CBF
 a startup aid to learn (faster) the CBF API (just if you are familiar with the cgiapp API)
 
 =back
+
+B<IMPORTANT>: This API is compatible with the CGI::Application 3.1. The API of successive CGI::Application versions may or may not work as well; I have no plan to update this module to maintain API compatibility.
 
 =head1 LEARNING WITH THIS API
 
@@ -688,6 +693,7 @@ This are the differences:
     $par = $s->param(myPar1=>'myPARAM1',  # $par is undef
                      myPar2=>'myPARAM2') ;
     $par = $s->param('myPar') ;           # $par eq 'myPARAM'
+    @params = $s->param()                 # keys %$par
     
     # CGI::Builder::CgiAppAPI::param() in scalar context
     $par = $s->param() ;                  # ref $par eq 'HASH'
@@ -695,8 +701,9 @@ This are the differences:
     $par = $s->param(myPar1=>'myPARAM1',  # ref $par eq 'HASH'
                      myPar2=>'myPARAM2') ;
     $par = $s->param('myPar') ;           # $par eq 'myPARAM'
+    %params = $s->param()                 # dereferenced
 
-As you see, in scalar context (no difference in list context) the C<param()> metod returns the reference to the underlying hash containing the parameters. This allows you to interact directly with the whole hash, or checking and deleting single parameters very easily:
+As you see, in scalar context the C<param()> method returns the reference to the underlying hash containing the parameters. This allows you to interact directly with the whole hash, or checking and deleting single parameters very easily:
 
     $P = $s->param ;
     while ( my ($p, $v) = each %$P )
@@ -707,6 +714,8 @@ As you see, in scalar context (no difference in list context) the C<param()> met
     
     # delete a parameter
     delete $s->param->{myPar} ;
+
+In list context the param() returns a copy of the parameter hash.
 
 =head1 API CONVERSION TABLE (quick reference)
 
@@ -1012,3 +1021,4 @@ See L<CGI::Builder/"SUPPORT">.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as perl itself.
 
+=cut
