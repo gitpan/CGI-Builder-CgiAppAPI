@@ -1,5 +1,5 @@
 package CGI::Builder::CgiAppAPI ;
-$VERSION = 1.26 ;
+$VERSION = 1.27 ;
 use strict ;
 
 # This file uses the "Perlish" coding style
@@ -118,7 +118,7 @@ use strict ;
      else
       { $p = $s->cgi->param($s->cgi_page_param)
       }
-   ; $s->page_name = $p if ( defined $p && length $p )
+   ; $s->page_name($p) if defined $p && length $p
    }
 
 ; my $exec = \&CGI::Builder::_::exec
@@ -133,20 +133,20 @@ use strict ;
    ; $s->PHASE > FIXUP && croak
      qq(Too late to call switch_to())
    ; defined $p && length $p  || croak qq(No page_name name passed)
-   ; $s->page_name = $p
+   ; $s->page_name($p)
 
-   ; $s->PHASE = SWITCH_HANDLER
+   ; $s->PHASE(SWITCH_HANDLER)
    ; my $shm    = $s->switch_handler_map
    ; my $switch_handler = $$shm{$p} || $s->can("SH_$p")
    ; $s->$switch_handler() if $switch_handler
 
    ; if ($s->PHASE < PRE_PAGE)
-      { $s->PHASE = PRE_PAGE
+      { $s->PHASE(PRE_PAGE)
       ; $s->$exec('pre_page')
       }
    
    ; if ( $s->PHASE < PAGE_HANDLER )
-      { $s->PHASE = PAGE_HANDLER
+      { $s->PHASE(PAGE_HANDLER)
       ; my $phm = $s->page_handler_map
       ; my $RM  = $s->RM_prefix
       ; my $al
@@ -185,7 +185,7 @@ use strict ;
          . qq(returning right now)
          ; $page_handler
            || croak qq(No page handler found for page '${\$s->page_name}')
-         ; $s->page = $pc
+         ; $s->page($pc)
          }
       }
    }
@@ -196,7 +196,7 @@ use strict ;
    ; if ($ht eq 'redirect')
       { $hints && carp
         qq(Change the 'redirect' header_type with the 'redirect()' method)
-      ; $s->PHASE = REDIR
+      ; $s->PHASE(REDIR)
       ; print $s->cgi->redirect( %{$s->header} )
       }
     elsif ($ht eq 'none')
@@ -243,8 +243,8 @@ use strict ;
 # override to be same as the original
 ; use Object::groups
       (
-      { name       => 'page_handler_map'
-        , pre_process=> sub
+      { name        => 'page_handler_map'
+      , pre_process => sub
                          { if ( ref $_[1] eq 'ARRAY' )
                             { $_[1] = { map { $_=>$_ } @{$_[1]} }
                             }
@@ -399,7 +399,7 @@ use strict ;
         qq(Change 'cgiapp_postrun' with 'OH_fixup' )
       . qq(and use the 'page_content' instead of expecting )
       . qq(it to be passed as an argument)
-      ; $s->page_content = \ ( my $p = $s->page_content )
+      ; $s->page_content( \ ( my $p = $s->page_content ) )
                               unless ref $s->page_content
       ; $s->cgiapp_postrun($s->page_content, @_)
       }
@@ -470,7 +470,7 @@ __END__
 
 CGI::Builder::CgiAppAPI - Use CGI::Application API with CGI::Builder
 
-=head1 VERSION 1.26
+=head1 VERSION 1.27
 
 The latest versions changes are reported in the F<Changes> file in this distribution. To have the complete list of all the extensions of the CBF, see L<CGI::Builder/"Extensions List">
 

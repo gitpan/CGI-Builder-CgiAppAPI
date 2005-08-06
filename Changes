@@ -1,5 +1,10 @@
 CGI-Builder-CgiAppAPI Latest Versions Changes
 
+Version 1.27
+- Removed the internal use of lvalue assigments incompatible with
+  the perl-bug #17663 (Perl 5 Debugger doesn't handle properly lvalue
+  sub assignment)
+
 Version 1.26
 - Changed prerequisites to CGI::Builder 1.3, OOTools 2
 - Updated tests and POD to the new OOTools 2 behaviour.
